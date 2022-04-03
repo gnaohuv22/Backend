@@ -34,15 +34,7 @@ export class PostService {
 
         return paginate<PostEntity>(queryBuilder, options);
     }
-}
 
-export class NewestPostService {
-
-    constructor(
-
-        @InjectRepository(PostEntity) private PostRepo: Repository<PostEntity>
-    ) {}
-    
     async getNewestPosts(): Promise<PostEntity[]> {
         try {
             const result = await this.PostRepo.find({
@@ -56,4 +48,5 @@ export class NewestPostService {
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
+
 }
