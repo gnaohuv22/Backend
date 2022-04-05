@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryBuilder, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { PostEntity } from './post.entity';
 import { 
     paginate,
@@ -28,19 +28,27 @@ export class PostService {
         }
     }
 
-    async paginate(options: IPaginationOptions): Promise<Pagination<PostEntity>> {
-        const queryBuilder = this.PostRepo.createQueryBuilder('p');
-        queryBuilder.orderBy('p.id', 'DESC')
+    async paginate(options: IPaginationOptions): Promise<Pagination<PostEntity>> { //return paginating results
+        
+        try {
+            const queryBuilder = this.PostRepo.createQueryBuilder('p');
+            queryBuilder.orderBy('p.id', 'DESC')
 
-        return paginate<PostEntity>(queryBuilder, options);
+            return paginate<PostEntity>(queryBuilder, options);
+
+        } catch (error) {
+
+            throw new InternalServerErrorException('Internal Server Error');
+        }
     }
 
     async getNewestPosts(): Promise<PostEntity[]> {
+        
         try {
             const result = await this.PostRepo.find({
-                take: 6,
+                take: 6, // this number affect the number of posts which appear in the homepage.
                 order: {
-                    id: "DESC",
+                    id: "DESC", // descending order.
                 },
             })
             return result;
@@ -48,5 +56,4 @@ export class PostService {
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
-
 }

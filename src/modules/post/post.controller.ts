@@ -1,4 +1,5 @@
-import { Controller, DefaultValuePipe, Get, ParseIntPipe, Query } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, ParseIntPipe, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { PostEntity } from './post.entity';
@@ -12,26 +13,27 @@ import { PostService } from './post.service';
 export class PostController {
     constructor(private readonly PostsService: PostService) {}
 
-    @ApiOkResponse({ schema: {example: {id: 'number', createdAt: 'string', content: 'string' } } })
+    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string' } } })
     @Get('all_posts')
     async getListPost(): Promise<PostEntity[]> {
         
         return await this.PostsService.getListPost();
     }
 
+    @ApiOkResponse({ schema: { example: {message:'Paginating successfully.'}}})
     @Get('pagination')
     async index(
-        @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
-        @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+        @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+        limit = 9,
     ): Promise<Pagination<PostEntity>> {
         
-        limit = limit > 100 ? 100 : limit;
         return this.PostsService.paginate({
             page,
             limit,
         });
     }
 
+    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string' } } })
     @Get('newest_posts')
     async getNewestPosts(): Promise<PostEntity[]> {
         

@@ -6,15 +6,16 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Blog for JS Club Test')
+    .setTitle('Blog page for JS Club')
     .setDescription('A simply demo for JS Club testing round')
-    .setVersion('1.0')
-    .addTag('cats')
+    .setVersion('0.12.2')
+    .addTag('why am i doing this?')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   
   app.enableCors();
   await app.listen(3000);
+  
 }
 bootstrap();
