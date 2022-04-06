@@ -1,3 +1,4 @@
+import { PostDto } from './dto/createPost.dto';
 import { Injectable, InternalServerErrorException, NotFoundException, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -7,6 +8,7 @@ import {
     Pagination,
     IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
+import { UpdatePostDto } from './dto/updatePost.dto';
 
 @Injectable()
 export class PostService {
@@ -67,6 +69,7 @@ export class PostService {
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
+
     async removePost(postId: number): Promise<any> {
 
         const post = await this.getPost(postId);
@@ -79,8 +82,39 @@ export class PostService {
             return { postId: postId };
 
         } catch (error) {
-            
+
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
-}
+
+    async createPost(post: PostDto): Promise<any> {
+        try {
+            const postEntity = new PostEntity;
+            postEntity.title = post.title;
+            postEntity.content = post.content;
+            postEntity.createdAt = post.createdAt;
+            postEntity.image = post.image;
+            postEntity.category = post.category;
+
+            const result = await this.PostRepo.save(postEntity);
+            return result;
+
+        } catch (error) {
+
+            throw new InternalServerErrorException('clgt');
+        }
+    }
+    /*
+    async updatePost(post: UpdatePostDto) {
+        
+        const postEntity = await this.getPost(post.id);
+        try {
+            const result = await this.PostRepo.save({...postEntity, ...post});
+            return result;
+        } catch (error) {
+
+            throw new InternalServerErrorException('Internal Server Error')
+        }
+    }
+    */
+}   

@@ -18,7 +18,7 @@ export class PostEntity {
     createdAt: string;
 
     @Column('text')
-    image: Array<string>;
+    image: string;
     
     @Column('int')
     adminId: number;

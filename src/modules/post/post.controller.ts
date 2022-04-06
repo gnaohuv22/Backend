@@ -1,8 +1,8 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { ApiInternalServerErrorResponse, ApiOkResponse } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { PostDto } from './dto/createPost.dto';
+import { UpdatePostDto } from './dto/updatePost.dto';
 import { PostEntity } from './post.entity';
 import { PostService } from './post.service';
 
@@ -11,14 +11,14 @@ import { PostService } from './post.service';
 export class PostController {
     constructor(private readonly PostsService: PostService) {}
 
-    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string' } } })
+    @ApiOkResponse({ schema: {example: { id: 'number', title: 'string', content: 'string' } } })
     @Get('/posts')
     async getListPost(): Promise<PostEntity[]> {
         
         return await this.PostsService.getListPost();
     }
 
-    @ApiOkResponse({ schema: { example: {id: 'number', title: 'string', content: 'string', createdAt: 'string', image: 'string', adminId: 'number', category: 'string' } } })
+    @ApiOkResponse({ schema: { example: { id: 'number', title: 'string', content: 'string', createdAt: 'string', image: 'string', adminId: 'number', category: 'string' } } })
     @Get('')
     async index(
         @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
@@ -31,18 +31,32 @@ export class PostController {
         });
     }
 
-    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string' } } })
+    @ApiOkResponse({ schema: {example: { id: 'number', title: 'string', content: 'string' } } })
     @Get('/recent')
     async getNewestPosts(): Promise<PostEntity[]> {
         
         return await this.PostsService.getNewestPosts();
     }
 
-    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string' } } })
+    @ApiOkResponse({ schema: {example: { id: 'number' } } })
     @Delete('/delete/:postId')
     async deletePost(@Param('postId') postId: number): Promise<PostDto> {
 
         return this.PostsService.removePost(postId);
     }
+
+    @ApiOkResponse({ schema: {example: { id: 'number', title: 'string', content: 'string'}}})
+    @Post('/create')
+    async createPost(@Body() post: PostDto): Promise<any> {
+
+        return this.PostsService.createPost(post);
+    }
+    /*
+    @Put('/update')
+    async updatePost(@Body() data : UpdatePostDto) {
+        
+        return await this.PostsService.updatePost(data);
+    }
+    */
 }
 
