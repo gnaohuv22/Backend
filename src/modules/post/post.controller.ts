@@ -1,30 +1,28 @@
-import { Body, Controller, DefaultValuePipe, Get, ParseIntPipe, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { PostDto } from './dto/createPost.dto';
 import { PostEntity } from './post.entity';
 import { PostService } from './post.service';
 
-@ApiUnauthorizedResponse({ schema: { example: { statusCode: 401, message: 'Access token is invalid', error: 'Unauthorized' } } })
-@ApiForbiddenResponse({ schema: { example: { statusCode: 403, message: 'Access token expired', error: 'Forbidden' } } })
-@ApiNotFoundResponse({ schema: { example: { statusCode: 404, message: 'Token not found', error: 'Not found' } } })
 @ApiInternalServerErrorResponse({ schema: { example: { statusCode: 500, message: 'Database connection error', error: 'Internal server error' } } })
 @Controller('news')
 export class PostController {
     constructor(private readonly PostsService: PostService) {}
 
     @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string' } } })
-    @Get('all_posts')
+    @Get('/posts')
     async getListPost(): Promise<PostEntity[]> {
         
         return await this.PostsService.getListPost();
     }
 
-    @ApiOkResponse({ schema: { example: {message:'Paginating successfully.'}}})
-    @Get('pagination')
+    @ApiOkResponse({ schema: { example: {id: 'number', title: 'string', content: 'string', createdAt: 'string', image: 'string', adminId: 'number', category: 'string' } } })
+    @Get('')
     async index(
         @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-        limit = 9,
+        @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number
     ): Promise<Pagination<PostEntity>> {
         
         return this.PostsService.paginate({
@@ -34,10 +32,17 @@ export class PostController {
     }
 
     @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string' } } })
-    @Get('newest_posts')
+    @Get('/recent')
     async getNewestPosts(): Promise<PostEntity[]> {
         
         return await this.PostsService.getNewestPosts();
+    }
+
+    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string' } } })
+    @Delete('/delete/:postId')
+    async deletePost(@Param('postId') postId: number): Promise<PostDto> {
+
+        return this.PostsService.removePost(postId);
     }
 }
 

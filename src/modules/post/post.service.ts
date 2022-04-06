@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PostEntity } from './post.entity';
@@ -53,6 +53,33 @@ export class PostService {
             })
             return result;
         } catch (error) {
+            throw new InternalServerErrorException('Internal Server Error');
+        }
+    }
+
+    async getPost(postId: number): Promise<PostEntity> {
+        try {
+            const result = await this.PostRepo.findOne(postId);
+            return result;
+
+        } catch (error) {
+
+            throw new InternalServerErrorException('Internal Server Error');
+        }
+    }
+    async removePost(postId: number): Promise<any> {
+
+        const post = await this.getPost(postId);
+        if (post == null) {
+
+            throw new NotFoundException(`Post have id-${postId} does not exist`);
+        }
+        try {
+            await this.PostRepo.delete(postId);
+            return { postId: postId };
+
+        } catch (error) {
+            
             throw new InternalServerErrorException('Internal Server Error');
         }
     }

@@ -14,7 +14,7 @@ export class PostEntity {
     @Column('text')
     content: string;
 
-    @Column({type: 'int', nullable: true})
+    @Column({type: 'varchar', nullable: true})
     createdAt: string;
 
     @Column('text')
