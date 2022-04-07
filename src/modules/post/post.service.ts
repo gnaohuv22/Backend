@@ -76,8 +76,7 @@ export class PostService {
         }
         try {
             await this.PostRepo.delete(postId);
-            return "Deleted successfully.";
-
+            return '';
         } catch (error) {
             throw new InternalServerErrorException('Internal Server Error');
         }

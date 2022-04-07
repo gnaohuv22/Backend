@@ -7,7 +7,7 @@ export class CommentEntity{
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column('varchar')
+    @Column('text')
     content: string;
 
     @Column('varchar')

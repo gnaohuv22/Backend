@@ -47,14 +47,29 @@ export class CommentService {
             throw new NotFoundException(`Comment ID-${id} does not exist`);
         }
     }
+
     async editComment(comment: UpdateCommentDto) {
         try {
             const commentEntity = await this.findComment(comment.id);
             commentEntity.name = comment.name;
             commentEntity.content = comment.content;
-            
+
             const result = await this.commentRepo.save(commentEntity);
             return result;
+        } catch (error) {
+            throw new InternalServerErrorException('Internal Server Error');
+        }
+    }
+
+    async deleteComment(id: number) {
+
+        const commentId = await this.findComment(id);
+        if (!commentId) {
+            throw new NotFoundException(`Comment ID ${id} does not exist`);
+        }
+        try {
+            await this.commentRepo.delete(commentId);
+            return "";
         } catch (error) {
             throw new InternalServerErrorException('Internal Server Error');
         }

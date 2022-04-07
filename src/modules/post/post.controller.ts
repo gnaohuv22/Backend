@@ -25,7 +25,7 @@ export class PostController {
         @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number
     ): Promise<Pagination<PostEntity>> {
         
-        return this.PostsService.paginate({
+        return await this.PostsService.paginate({
             page,
             limit,
         });
@@ -42,14 +42,14 @@ export class PostController {
     @Delete('/delete/:postId')
     async deletePost(@Param('postId') postId: number): Promise<createPostDto> {
 
-        return this.PostsService.removePost(postId);
+        return await this.PostsService.removePost(postId);
     }
 
     @ApiOkResponse({ schema: {example: { message: 'Created successfully.' } } })
     @Post('/create')
     async createPost(@Body() post: createPostDto): Promise<any> {
 
-        return this.PostsService.createPost(post);
+        return await this.PostsService.createPost(post);
     }
     /*
     @Put('/update')

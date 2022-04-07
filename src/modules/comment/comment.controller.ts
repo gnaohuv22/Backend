@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiInternalServerErrorResponse, ApiOkResponse } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
 import { createCommentDto } from './dto/createComment.dto';
@@ -17,6 +17,7 @@ export class CommentController {
         return await this.commentService.getComment();
     }
 
+    @ApiOkResponse({ schema: {example: { message: 'Created successfully.' } } })
     @Post('')
     async addComment(@Body() comment: createCommentDto): Promise<any> {
 
@@ -28,5 +29,12 @@ export class CommentController {
     async editComment(@Body() data: UpdateCommentDto) {
         
         return await this.commentService.editComment(data);
+    }
+    
+    @ApiOkResponse({ schema: {example: { message: 'Deleted successfully.' } } })
+    @Delete('/delete/:id')
+    async deletePost(@Param('id') id: number): Promise<any> {
+
+        return await this.commentService.deleteComment(id);
     }
 }
