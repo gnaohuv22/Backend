@@ -46,7 +46,7 @@ export class PostService {
         
         try {
             const result = await this.PostRepo.find({
-                take: 6, // this number affect the number of posts which appear in the homepage.
+                take: 4, // this number affect the number of posts which appear in the homepage.
                 order: {
                     id: "DESC", // descending order.
                 },

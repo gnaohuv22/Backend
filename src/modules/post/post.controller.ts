@@ -1,5 +1,5 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
-import { ApiCreatedResponse, ApiInternalServerErrorResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiInternalServerErrorResponse, ApiOkResponse } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { createPostDto } from './dto/createPost.dto';
 import { UpdatePostDto } from './dto/updatePost.dto';
@@ -22,7 +22,7 @@ export class PostController {
     @Get('')
     async index(
         @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-        @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number
+        limit = 6,
     ): Promise<Pagination<PostEntity>> {
         
         return await this.PostsService.paginate({

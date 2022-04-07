@@ -44,7 +44,7 @@ export class CommentService {
             const result = await this.commentRepo.findOne(id);
             return result;
         } catch (error) {
-            throw new NotFoundException(`Comment ID-${id} does not exist`);
+            throw new NotFoundException(`Comment ID ${id} does not exist`);
         }
     }
 
