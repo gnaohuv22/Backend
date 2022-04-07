@@ -1,4 +1,4 @@
-import { PostDto } from './dto/createPost.dto';
+import { createPostDto } from './dto/createPost.dto';
 import { Injectable, InternalServerErrorException, NotFoundException, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -25,7 +25,6 @@ export class PostService {
             return result;
 
         } catch (error) {
-            
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
@@ -39,7 +38,6 @@ export class PostService {
             return paginate<PostEntity>(queryBuilder, options);
 
         } catch (error) {
-
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
@@ -65,7 +63,6 @@ export class PostService {
             return result;
 
         } catch (error) {
-
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
@@ -79,15 +76,14 @@ export class PostService {
         }
         try {
             await this.PostRepo.delete(postId);
-            return { postId: postId };
+            return "Deleted successfully.";
 
         } catch (error) {
-
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
 
-    async createPost(post: PostDto): Promise<any> {
+    async createPost(post: createPostDto): Promise<any> {
         try {
             const postEntity = new PostEntity;
             postEntity.title = post.title;
@@ -101,9 +97,8 @@ export class PostService {
             return result;
 
         } catch (error) {
-
             //console.log(error);
-            throw new InternalServerErrorException('clgt');
+            throw new InternalServerErrorException('Internal Server Error');
         }
     }
     /*

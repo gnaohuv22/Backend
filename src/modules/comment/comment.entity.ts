@@ -13,8 +13,8 @@ export class CommentEntity{
     @Column('varchar')
     name: string;
 
-    @Column('date')
-    createdAt: Date;
+    @Column({type: 'varchar', nullable: true})
+    createdAt: string;
 
     @Column('int')
     postId: number;

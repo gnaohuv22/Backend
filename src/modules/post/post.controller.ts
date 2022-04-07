@@ -1,7 +1,7 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
-import { ApiInternalServerErrorResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiInternalServerErrorResponse, ApiOkResponse } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { PostDto } from './dto/createPost.dto';
+import { createPostDto } from './dto/createPost.dto';
 import { UpdatePostDto } from './dto/updatePost.dto';
 import { PostEntity } from './post.entity';
 import { PostService } from './post.service';
@@ -38,16 +38,16 @@ export class PostController {
         return await this.PostsService.getNewestPosts();
     }
 
-    @ApiOkResponse({ schema: {example: { message: `Deleted successfully.` } } })
+    @ApiOkResponse({ schema: {example: { message: 'Deleted successfully.' } } })
     @Delete('/delete/:postId')
-    async deletePost(@Param('postId') postId: number): Promise<PostDto> {
+    async deletePost(@Param('postId') postId: number): Promise<createPostDto> {
 
         return this.PostsService.removePost(postId);
     }
 
-    @ApiOkResponse({ schema: {example: { id: 'number', title: 'string', content: 'string'} } })
+    @ApiOkResponse({ schema: {example: { message: 'Created successfully.' } } })
     @Post('/create')
-    async createPost(@Body() post: PostDto): Promise<any> {
+    async createPost(@Body() post: createPostDto): Promise<any> {
 
         return this.PostsService.createPost(post);
     }

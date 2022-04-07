@@ -1,10 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiUnauthorizedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiInternalServerErrorResponse, ApiOkResponse } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { ApiInternalServerErrorResponse, ApiOkResponse } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
+import { createCommentDto } from './dto/createComment.dto';
+import { UpdateCommentDto } from './dto/updateComment.dto';
 
-@ApiUnauthorizedResponse({ schema: { example: { statusCode: 401, message: 'Access token is invalid', error: 'Unauthorized' } } })
-@ApiForbiddenResponse({ schema: { example: { statusCode: 403, message: 'Access token expired', error: 'Forbidden' } } })
-@ApiNotFoundResponse({ schema: { example: { statusCode: 404, message: 'Token not found', error: 'Not found' } } })
 @ApiInternalServerErrorResponse({ schema: { example: { statusCode: 500, message: 'Database connection error', error: 'Internal server error' } } })
 @Controller('comment')
 export class CommentController {
@@ -13,8 +12,21 @@ export class CommentController {
     ) {}
     
     @ApiOkResponse({ schema: {example: {id: 'number', image: 'string', content: 'string' } } })
-    @Get()
+    @Get('')
     async getComment() {
         return await this.commentService.getComment();
+    }
+
+    @Post('')
+    async addComment(@Body() comment: createCommentDto): Promise<any> {
+
+        return await this.commentService.addComment(comment);
+    }
+
+    @ApiOkResponse({ schema: {example: {name: 'string', content: 'string' } } })
+    @Put('/edit/:id')
+    async editComment(@Body() data: UpdateCommentDto) {
+        
+        return await this.commentService.editComment(data);
     }
 }
