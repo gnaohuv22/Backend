@@ -93,6 +93,7 @@ export class PostService {
             postEntity.title = post.title;
             postEntity.content = post.content;
             postEntity.createdAt = post.createdAt;
+            postEntity.adminId = post.adminId;
             postEntity.image = post.image;
             postEntity.category = post.category;
 
@@ -101,6 +102,7 @@ export class PostService {
 
         } catch (error) {
 
+            //console.log(error);
             throw new InternalServerErrorException('clgt');
         }
     }

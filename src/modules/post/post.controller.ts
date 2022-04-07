@@ -38,14 +38,14 @@ export class PostController {
         return await this.PostsService.getNewestPosts();
     }
 
-    @ApiOkResponse({ schema: {example: { id: 'number' } } })
+    @ApiOkResponse({ schema: {example: { message: `Deleted successfully.` } } })
     @Delete('/delete/:postId')
     async deletePost(@Param('postId') postId: number): Promise<PostDto> {
 
         return this.PostsService.removePost(postId);
     }
 
-    @ApiOkResponse({ schema: {example: { id: 'number', title: 'string', content: 'string'}}})
+    @ApiOkResponse({ schema: {example: { id: 'number', title: 'string', content: 'string'} } })
     @Post('/create')
     async createPost(@Body() post: PostDto): Promise<any> {
 
