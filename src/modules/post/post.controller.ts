@@ -12,7 +12,7 @@ export class PostController {
     constructor(private readonly PostsService: PostService) {}
 
     @ApiOkResponse({ schema: {example: { id: 'number', title: 'string', content: 'string' } } })
-    @Get('/posts')
+    @Get('/all')
     async getListPost(): Promise<PostEntity[]> {
         
         return await this.PostsService.getListPost();
@@ -51,12 +51,19 @@ export class PostController {
 
         return await this.PostsService.createPost(post);
     }
-    /*
+    
+    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string', createdAt: 'string', image: 'string', adminId: 'number', category: 'string'} } })
+    @Get('/:postId')
+    async getAPost(@Param('postId') postId: number): Promise<any> {
+        
+        return await this.PostsService.getAPost(postId);
+    }
+
     @Put('/update')
     async updatePost(@Body() data : UpdatePostDto) {
         
         return await this.PostsService.updatePost(data);
     }
-    */
+
 }
 

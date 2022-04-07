@@ -100,17 +100,30 @@ export class PostService {
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
-    /*
+
+    async getAPost(id: number): Promise<any> {
+        try {
+            const result = await this.PostRepo.findOne(id);
+            return result
+        } catch (error) {
+            throw new InternalServerErrorException('Internal Server Error');
+        }
+    }
+    
     async updatePost(post: UpdatePostDto) {
         
         const postEntity = await this.getPost(post.id);
         try {
-            const result = await this.PostRepo.save({...postEntity, ...post});
+            postEntity.title = post.title;
+            postEntity.content = post.content;
+            postEntity.image = post.image;
+            postEntity.category = post.category;
+
+            const result = await this.PostRepo.save(postEntity);
             return result;
         } catch (error) {
 
             throw new InternalServerErrorException('Internal Server Error')
         }
     }
-    */
 }   

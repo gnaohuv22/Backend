@@ -18,7 +18,7 @@ export class CommentController {
     }
 
     @ApiOkResponse({ schema: {example: { message: 'Created successfully.' } } })
-    @Post('')
+    @Post('/create')
     async addComment(@Body() comment: createCommentDto): Promise<any> {
 
         return await this.commentService.addComment(comment);
