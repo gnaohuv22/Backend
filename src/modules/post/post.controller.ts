@@ -7,7 +7,7 @@ import { PostEntity } from './post.entity';
 import { PostService } from './post.service';
 
 @ApiInternalServerErrorResponse({ schema: { example: { statusCode: 500, message: 'Database connection error', error: 'Internal server error' } } })
-@Controller('news')
+@Controller('post')
 export class PostController {
     constructor(private readonly PostsService: PostService) {}
 
@@ -39,17 +39,17 @@ export class PostController {
     }
 
     @ApiOkResponse({ schema: {example: { id: 'number', title: 'string', content: 'string' } } })
-    @Get('/recent')
+    @Get('/side')
     async getNewestPosts(): Promise<PostEntity[]> {
         
-        return await this.PostsService.getNewestPosts();
+        return await this.PostsService.getFourNextNewestPosts();
     }
 
-    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string', category: 'string'}}})
-    @Get('/:category')
-    async getFourPostsByCategory(@Param('category') category: string): Promise<PostEntity[]> {
-
-        return await this.PostsService.sortbyCategory(category);
+    @ApiOkResponse({ schema: {example: { id: 'number', title: 'string', content: 'string' } } })
+    @Get('/center')
+    async getSidePosts(): Promise<PostEntity[]> {
+        
+        return await this.PostsService.getSixNewestPosts();
     }
    
     @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string', createdAt: 'string', image: 'string', adminId: 'number', category: 'string'} } })

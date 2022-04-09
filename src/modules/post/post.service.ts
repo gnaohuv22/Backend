@@ -42,11 +42,12 @@ export class PostService {
         }
     }
 
-    async getNewestPosts(): Promise<PostEntity[]> {
+    async getFourNextNewestPosts(): Promise<PostEntity[]> {
         
         try {
             const result = await this.PostRepo.find({
                 take: 4, // this number affect the number of posts which appear in the homepage.
+                skip: 6,
                 order: {
                     id: "DESC", // descending order.
                 },
@@ -57,17 +58,14 @@ export class PostService {
         }
     }
 
-    async sortbyCategory(category: string): Promise<PostEntity[]> {
-
+    async getSixNewestPosts(): Promise<PostEntity[]> {
+        
         try {
             const result = await this.PostRepo.find({
-                take: 4, // this number affect the number of posts which appear in the homepage.
+                take: 6, // this number affect the number of posts which appear in the homepage.
                 order: {
                     id: "DESC", // descending order.
                 },
-                where: {
-                    category: category,
-                }
             })
             return result;
         } catch (error) {
@@ -119,7 +117,6 @@ export class PostService {
             postEntity.title = post.title;
             postEntity.content = post.content;
             postEntity.createdAt = post.createdAt;
-            postEntity.adminId = post.adminId;
             postEntity.image[99] = post.image[99];
             postEntity.category = post.category;
 
@@ -149,6 +146,7 @@ export class PostService {
             postEntity.content = post.content;
             postEntity.image[99] = post.image[99];
             postEntity.category = post.category;
+            postEntity.onTheSlide = post.onTheSlide;
 
             const result = await this.PostRepo.save(postEntity);
             return result;

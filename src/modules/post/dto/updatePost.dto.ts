@@ -15,8 +15,6 @@ export class UpdatePostDto implements Readonly<UpdatePostDto> {
     @ApiProperty({ type: String })
     image?: Array<string>;
 
-    adminId?: number;
-
     @ApiProperty({ type: String })
     category?: string;
 

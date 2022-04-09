@@ -18,9 +18,6 @@ export class createPostDto {
     @ApiProperty({ type: String })
     image?: Array<string>;
 
-    @ApiProperty({ type: Number })
-    adminId?: number;
-
     @ApiProperty({ type: String })
     category?: string;
 

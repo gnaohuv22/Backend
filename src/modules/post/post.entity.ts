@@ -1,5 +1,3 @@
-import { AdminEntity } from '../admin/admin.entity';
-import { CommentEntity } from '../comment/comment.entity';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -19,19 +17,10 @@ export class PostEntity {
 
     @Column('text')
     image: Array<string>;
-    
-    @Column('int')
-    adminId: number;
 
     @Column('varchar')
     category: string;
 
     @Column('boolean')
     onTheSlide: boolean;
-
-    @ManyToOne(() => AdminEntity, admin => admin.id)
-    admin: AdminEntity;
-
-    @OneToMany(() => CommentEntity, comments => comments.postId)
-    comments: CommentEntity[];
 }
