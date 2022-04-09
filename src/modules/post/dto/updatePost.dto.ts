@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class UpdatePostDto implements Readonly<UpdatePostDto> {
 
-    @ApiProperty({ type: String })
     id: number;
 
     @ApiProperty({ type: String })

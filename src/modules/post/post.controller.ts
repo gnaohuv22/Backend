@@ -38,6 +38,20 @@ export class PostController {
         return await this.PostsService.getNewestPosts();
     }
 
+    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string', category: 'string'}}})
+    @Get('/:category')
+    async getFourPostsByCategory(@Param('category') category: string): Promise<PostEntity[]> {
+
+        return await this.PostsService.sortbyCategory(category);
+    }
+   
+    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string', createdAt: 'string', image: 'string', adminId: 'number', category: 'string'} } })
+    @Get('/:postId')
+    async getAPost(@Param('postId') postId: number): Promise<any> {
+        
+        return await this.PostsService.getAPost(postId);
+    }
+
     @ApiOkResponse({ schema: {example: { message: 'Deleted successfully.' } } })
     @Delete('/delete/:postId')
     async deletePost(@Param('postId') postId: number): Promise<createPostDto> {
@@ -51,19 +65,12 @@ export class PostController {
 
         return await this.PostsService.createPost(post);
     }
-    
-    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string', createdAt: 'string', image: 'string', adminId: 'number', category: 'string'} } })
-    @Get('/:postId')
-    async getAPost(@Param('postId') postId: number): Promise<any> {
+ 
+    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string', message: 'Updated successfully.'}}})
+    @Put('/update/:postId')
+    async updatePost(@Param('postId') postId: number, @Body() data : UpdatePostDto) {
         
-        return await this.PostsService.getAPost(postId);
+        return await this.PostsService.updatePost(postId, data);
     }
-
-    @Put('/update')
-    async updatePost(@Body() data : UpdatePostDto) {
-        
-        return await this.PostsService.updatePost(data);
-    }
-
 }
 

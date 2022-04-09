@@ -57,6 +57,24 @@ export class PostService {
         }
     }
 
+    async sortbyCategory(category: string): Promise<PostEntity[]> {
+
+        try {
+            const result = await this.PostRepo.find({
+                take: 4, // this number affect the number of posts which appear in the homepage.
+                order: {
+                    id: "DESC", // descending order.
+                },
+                where: {
+                    category: category,
+                }
+            })
+            return result;
+        } catch (error) {
+            throw new InternalServerErrorException('Internal Server Error');
+        }
+    }
+
     async getPost(postId: number): Promise<PostEntity> {
         try {
             const result = await this.PostRepo.findOne(postId);
@@ -110,9 +128,9 @@ export class PostService {
         }
     }
     
-    async updatePost(post: UpdatePostDto) {
+    async updatePost(id: number, post: UpdatePostDto) {
         
-        const postEntity = await this.getPost(post.id);
+        const postEntity = await this.getPost(id);
         try {
             postEntity.title = post.title;
             postEntity.content = post.content;
@@ -126,4 +144,5 @@ export class PostService {
             throw new InternalServerErrorException('Internal Server Error')
         }
     }
+
 }   
