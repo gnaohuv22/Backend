@@ -18,6 +18,13 @@ export class PostController {
         return await this.PostsService.getListPost();
     }
 
+    @ApiOkResponse({ schema: {example: {id: 'number', title: 'string', content: 'string', onTheSlide: 'boolean'}}})
+    @Get('/trending')
+    async getSlidePost(): Promise<PostEntity[]> {
+
+        return await this.PostsService.getPostOnTheSlide();
+    }
+
     @ApiOkResponse({ schema: { example: { id: 'number', title: 'string', content: 'string', createdAt: 'string', image: 'string', adminId: 'number', category: 'string' } } })
     @Get('')
     async index(

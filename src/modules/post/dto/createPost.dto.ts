@@ -16,11 +16,14 @@ export class createPostDto {
     createdAt?: string;
 
     @ApiProperty({ type: String })
-    image?: string;
+    image?: Array<string>;
 
     @ApiProperty({ type: Number })
     adminId?: number;
 
     @ApiProperty({ type: String })
     category?: string;
+
+    @ApiProperty({ type: Boolean })
+    onTheSlide?: boolean;
 }

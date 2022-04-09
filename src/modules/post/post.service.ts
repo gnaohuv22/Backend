@@ -75,6 +75,19 @@ export class PostService {
         }
     }
 
+    async getPostOnTheSlide(): Promise<PostEntity[]> {
+        try {
+            const result = await this.PostRepo.find({
+                where: { 
+                    onTheSlide: true,
+                }
+            })
+            return result;
+        } catch (error) {
+            throw new InternalServerErrorException('Internal Server Error');
+        }
+    }
+
     async getPost(postId: number): Promise<PostEntity> {
         try {
             const result = await this.PostRepo.findOne(postId);
@@ -107,7 +120,7 @@ export class PostService {
             postEntity.content = post.content;
             postEntity.createdAt = post.createdAt;
             postEntity.adminId = post.adminId;
-            postEntity.image = post.image;
+            postEntity.image[99] = post.image[99];
             postEntity.category = post.category;
 
             const result = await this.PostRepo.save(postEntity);
@@ -134,7 +147,7 @@ export class PostService {
         try {
             postEntity.title = post.title;
             postEntity.content = post.content;
-            postEntity.image = post.image;
+            postEntity.image[99] = post.image[99];
             postEntity.category = post.category;
 
             const result = await this.PostRepo.save(postEntity);

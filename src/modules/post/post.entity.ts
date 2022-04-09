@@ -18,13 +18,16 @@ export class PostEntity {
     createdAt: string;
 
     @Column('text')
-    image: string;
+    image: Array<string>;
     
     @Column('int')
     adminId: number;
 
     @Column('varchar')
     category: string;
+
+    @Column('boolean')
+    onTheSlide: boolean;
 
     @ManyToOne(() => AdminEntity, admin => admin.id)
     admin: AdminEntity;

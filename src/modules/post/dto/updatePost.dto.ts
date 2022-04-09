@@ -13,10 +13,13 @@ export class UpdatePostDto implements Readonly<UpdatePostDto> {
     createdAt?: string;
 
     @ApiProperty({ type: String })
-    image?: string;
+    image?: Array<string>;
 
     adminId?: number;
 
     @ApiProperty({ type: String })
     category?: string;
+
+    @ApiProperty({ type: Boolean})
+    onTheSlide?: boolean;
 }
