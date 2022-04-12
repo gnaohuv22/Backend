@@ -15,6 +15,9 @@ export class PostEntity {
     @Column({type: 'varchar', nullable: true})
     createdAt: string;
 
+    @Column('int')
+    adminId: number;
+
     @Column('text')
     image: Array<string>;
 

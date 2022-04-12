@@ -4,6 +4,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostEntity } from './modules/post/post.entity';
 import { PostModule } from './modules/post/post.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { AdminEntity } from './modules/admin/admin.entity';
+import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -13,9 +16,9 @@ import { PostModule } from './modules/post/post.module';
     username: 'root',
     password: 'gnaohuv',
     database: 'demo',
-    entities: [PostEntity],
+    autoLoadEntities: true,
     synchronize: true,
-}), PostModule],
+}), PostModule, AuthModule, AdminModule],
   controllers: [AppController],
   providers: [AppService],
 })

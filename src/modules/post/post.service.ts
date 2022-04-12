@@ -1,5 +1,5 @@
 import { createPostDto } from './dto/createPost.dto';
-import { Injectable, InternalServerErrorException, NotFoundException, Post } from '@nestjs/common';
+import { HttpException, Injectable, InternalServerErrorException, NotFoundException, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PostEntity } from './post.entity';
@@ -107,6 +107,7 @@ export class PostService {
             await this.PostRepo.delete(postId);
             return '';
         } catch (error) {
+            console.log(error);
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
@@ -116,44 +117,65 @@ export class PostService {
             const postEntity = new PostEntity;
             postEntity.title = post.title;
             postEntity.content = post.content;
-            postEntity.createdAt = post.createdAt;
-            postEntity.image[99] = post.image[99];
+            postEntity.adminId = post.adminId;
+            postEntity.image = post.image;
             postEntity.category = post.category;
+            postEntity.onTheSlide = false;
 
             const result = await this.PostRepo.save(postEntity);
             return result;
 
         } catch (error) {
-            //console.log(error);
+            console.log(error);
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
 
     async getAPost(id: number): Promise<any> {
+        const result = await this.PostRepo.findOne(id);
+        if (id > await this.getMaxId()) {
+            throw new NotFoundException(`Post have id-${id} does not exist`);
+        }
         try {
-            const result = await this.PostRepo.findOne(id);
-            return result
+            return result;
         } catch (error) {
+            // console.log(error);
             throw new InternalServerErrorException('Internal Server Error');
         }
     }
+
+    async getMaxId(): Promise<number> {
+        const result = await this.PostRepo.find({
+            take: 1,
+            order: { 
+                id: 'DESC',
+            }
+        })
+        return result[0].id;
+    }
     
-    async updatePost(id: number, post: UpdatePostDto) {
+    async updatePost(post: UpdatePostDto) {
         
-        const postEntity = await this.getPost(id);
-        try {
-            postEntity.title = post.title;
-            postEntity.content = post.content;
-            postEntity.image[99] = post.image[99];
-            postEntity.category = post.category;
-            postEntity.onTheSlide = post.onTheSlide;
+        const postEntity = new PostEntity;
+        postEntity.id = post.id;
+        postEntity.title = post.title;
+        postEntity.content = post.content;
+        postEntity.adminId = post.adminId;
+        postEntity.image = post.image;
+        postEntity.category = post.category;
+        postEntity.onTheSlide = post.onTheSlide;
 
-            const result = await this.PostRepo.save(postEntity);
-            return result;
-        } catch (error) {
-
-            throw new InternalServerErrorException('Internal Server Error')
+        if (post.id > await this.getMaxId()) {
+            throw new NotFoundException(`Post have id-${post.id} does not exist`);
+        }
+        else {
+            try {
+                const result = await this.PostRepo.save(postEntity);
+                return result;
+            } catch (error) {
+                console.log(error);
+                throw new InternalServerErrorException('Internal Server Error')
+            }
         }
     }
-
 }   
