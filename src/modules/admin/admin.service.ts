@@ -1,9 +1,10 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthLoginDto } from '../auth/dto/auth-login.dto';
 import { AuthRegisterDto } from '../auth/dto/auth-register.dto';
 import { AdminEntity } from './admin.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AdminService {
@@ -32,7 +33,6 @@ export class AdminService {
         const result = await this.adminRepo.findOne({
                 where: { email: email }
             });
-        //console.log(result);
         return result;
         
     }
@@ -44,10 +44,11 @@ export class AdminService {
         });
         if (adminEmail == null) {
             try {
+                const hashedPassword = await bcrypt.hash(authRegister.password, 10);
                 const adminEntity = new AdminEntity();
                 adminEntity.name = authRegister.name;
                 adminEntity.email = authRegister.email;
-                adminEntity.password = authRegister.password;
+                adminEntity.password = hashedPassword;
 
                 const result = await this.adminRepo.save(adminEntity);
                 return result;
@@ -65,10 +66,14 @@ export class AdminService {
         if (admin == null) {
             throw new NotFoundException('Admin not found');
         } else {
-            if (authLogin.password == admin.password) {
+            try {
+                const isValid = await bcrypt.compare(authLogin.password, admin.password);
+                if (!isValid) {
+                    throw new BadRequestException('Bad request');
+                }
                 return admin;
-            } else {
-                throw new UnauthorizedException(' Email or password is incorrect')
+            } catch (error) {
+                throw new InternalServerErrorException('Internal Server Error');
             }
         }
     }
