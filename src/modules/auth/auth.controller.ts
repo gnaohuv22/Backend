@@ -1,11 +1,12 @@
-import { Body, Controller, Post } from "@nestjs/common";
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { Body, Controller, Param, Post } from "@nestjs/common";
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { AdminService } from "../admin/admin.service";
 import { AuthService } from "./auth.service";
 import { AuthLoginDto } from "./dto/auth-login.dto";
 import { AuthRegisterDto } from "./dto/auth-register.dto";
 
 @ApiForbiddenResponse({ schema: { example: { statusCode: 403, message: 'Email already registered', error: 'Forbidden' } } })
+@ApiNotFoundResponse({ schema: { example: { statusCode: 404, message: 'Email not found', error: 'Not found' } } })
 @ApiBadRequestResponse({ schema: { example: { statusCode: 400, message: 'Bad request', error: 'Bad request' } } })
 @ApiUnauthorizedResponse({ schema: { example: { statusCode: 401, message: 'Email or password is incorrect', error: 'Unauthorized' } } })
 @ApiInternalServerErrorResponse({ schema: { example: { statusCode: 500, message: 'Database connection error', error: 'Internal server error' } } })
