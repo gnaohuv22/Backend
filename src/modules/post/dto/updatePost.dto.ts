@@ -14,9 +14,6 @@ export class UpdatePostDto implements Readonly<UpdatePostDto> {
     @ApiProperty({ type: String })
     image?: Array<string>;
 
-    @ApiProperty({ type: String })
-    category?: string;
-
-    @ApiProperty({ type: Boolean})
-    onTheSlide?: boolean;
+    @ApiProperty({ type: Number})
+    onTheSlide?: number;
 }

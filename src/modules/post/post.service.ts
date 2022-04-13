@@ -1,5 +1,5 @@
 import { createPostDto } from './dto/createPost.dto';
-import { HttpException, Injectable, InternalServerErrorException, NotFoundException, Post } from '@nestjs/common';
+import { ForbiddenException, HttpException, Injectable, InternalServerErrorException, NotFoundException, Post } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PostEntity } from './post.entity';
@@ -118,8 +118,7 @@ export class PostService {
             postEntity.title = post.title;
             postEntity.content = post.content;
             postEntity.image = post.image;
-            postEntity.category = post.category;
-            postEntity.onTheSlide = false;
+            postEntity.onTheSlide = 0;
 
             const result = await this.PostRepo.save(postEntity);
             return result;
@@ -130,7 +129,7 @@ export class PostService {
         }
     }
 
-    async getAPost(id: number): Promise<any> {
+    async getAPost(id: number): Promise<PostEntity> {
         const result = await this.PostRepo.findOne(id);
         if (id > await this.getMaxId()) {
             throw new NotFoundException(`Post have id-${id} does not exist`);
@@ -154,25 +153,45 @@ export class PostService {
     }
     
     async updatePost(post: UpdatePostDto) {
-        
-        const postEntity = new PostEntity;
-        postEntity.id = post.id;
-        postEntity.title = post.title;
-        postEntity.content = post.content;
-        postEntity.image = post.image;
-        postEntity.category = post.category;
-        postEntity.onTheSlide = post.onTheSlide;
 
+        const postEntity = await this.PostRepo.findOne(post.id);
         if (post.id > await this.getMaxId()) {
             throw new NotFoundException(`Post have id-${post.id} does not exist`);
         }
-        else {
+        else if (post.onTheSlide > 1) {
+            throw new ForbiddenException('Invalid value.')
+        } else {
             try {
+                postEntity.title = post.title;
+                postEntity.content = post.content;
+                postEntity.image = post.image;
+                postEntity.onTheSlide = post.onTheSlide;
+
                 const result = await this.PostRepo.save(postEntity);
                 return result;
             } catch (error) {
-                console.log(error);
+                //console.log(error);
                 throw new InternalServerErrorException('Internal Server Error')
+            }
+        }
+    }
+
+    async updatePostStatus(id: number, status: number) {
+        
+        if (id > await this.getMaxId()) {
+            throw new NotFoundException(`Post have id-${id} does not exist`);
+        } else if (status > 1) {
+            throw new ForbiddenException('Invalid value.')
+        } else {
+            try {
+                const post = await this.PostRepo.findOne(id);
+                post.onTheSlide = status;
+
+                const result = await this.PostRepo.save(post);
+                return result;
+            } catch (error) {
+                //console.log(error);
+                throw new InternalServerErrorException('Internal Server Error');
             }
         }
     }

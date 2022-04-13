@@ -15,9 +15,6 @@ export class PostEntity {
     @Column('text')
     image: Array<string>;
 
-    @Column('varchar')
-    category: string;
-
-    @Column('boolean')
-    onTheSlide: boolean;
+    @Column('int')
+    onTheSlide: number;
 }

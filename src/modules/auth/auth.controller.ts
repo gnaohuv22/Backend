@@ -7,7 +7,7 @@ import { AuthRegisterDto } from "./dto/auth-register.dto";
 
 @ApiForbiddenResponse({ schema: { example: { statusCode: 403, message: 'Email already registered', error: 'Forbidden' } } })
 @ApiBadRequestResponse({ schema: { example: { statusCode: 400, message: 'Bad request', error: 'Bad request' } } })
-@ApiUnauthorizedResponse({ schema: { example: { statusCode: 404, message: 'Email or password is incorrect', error: 'Unauthorized' } } })
+@ApiUnauthorizedResponse({ schema: { example: { statusCode: 401, message: 'Email or password is incorrect', error: 'Unauthorized' } } })
 @ApiInternalServerErrorResponse({ schema: { example: { statusCode: 500, message: 'Database connection error', error: 'Internal server error' } } })
 @Controller('auth')
 export class AuthController {
@@ -23,6 +23,7 @@ export class AuthController {
     }
 
     @ApiCreatedResponse({ schema: { example: { name: 'string', email: 'string', password: 'string', id: 'number' } } })
+    @ApiUnauthorizedResponse({ schema: { example: { statusCode: 401, message: 'Email or password is incorrect', error: 'Unauthorized' } } })
     @Post('/register')
     async register(@Body() authRegister: AuthRegisterDto): Promise<any> {
         return await this.adminService.addAdmin(authRegister);

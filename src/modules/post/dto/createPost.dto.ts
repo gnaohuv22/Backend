@@ -11,7 +11,4 @@ export class createPostDto {
 
     @ApiProperty({ type: String })
     image?: Array<string>;
-
-    @ApiProperty({ type: String })
-    category: string;
 }
