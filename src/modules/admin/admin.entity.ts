@@ -15,7 +15,4 @@ export class AdminEntity {
 
     @Column({type: 'varchar', nullable: false})
     password: string;
-
-    @OneToMany(() => PostEntity, post => post.adminId)
-    post: PostEntity[];
 }

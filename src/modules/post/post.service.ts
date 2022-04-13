@@ -117,7 +117,6 @@ export class PostService {
             const postEntity = new PostEntity;
             postEntity.title = post.title;
             postEntity.content = post.content;
-            postEntity.adminId = post.adminId;
             postEntity.image = post.image;
             postEntity.category = post.category;
             postEntity.onTheSlide = false;
@@ -160,7 +159,6 @@ export class PostService {
         postEntity.id = post.id;
         postEntity.title = post.title;
         postEntity.content = post.content;
-        postEntity.adminId = post.adminId;
         postEntity.image = post.image;
         postEntity.category = post.category;
         postEntity.onTheSlide = post.onTheSlide;

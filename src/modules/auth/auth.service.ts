@@ -1,6 +1,5 @@
-import { CACHE_MANAGER, forwardRef, Inject, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { JwtService, JwtSignOptions } from "@nestjs/jwt";
-import { AdminEntity } from "../admin/admin.entity";
 import { AdminService } from "../admin/admin.service";
 import { AuthLoginDto } from "./dto/auth-login.dto";
 import { config } from 'dotenv';
@@ -10,7 +9,6 @@ export class AuthService {
     constructor(
         @Inject(forwardRef(() => AdminService)) private adminService: AdminService,
         private jwtService: JwtService,
-        //@Inject(CACHE_MANAGER) private cacheManager: CacheManager,
         ) {}
 
     async login(authLogin: AuthLoginDto): Promise<any> {
